@@ -1,93 +1,133 @@
-# Workshop Spring Boot MongoDB
+# Workshop Spring Boot com MongoDB
 
-Projeto demonstrativo de uma aplicação backend com Spring Boot e MongoDB, para gerenciar usuários e posts, incluindo comentários.
-
----
-
-## Descrição
-
-Este projeto implementa uma API REST para cadastro e consulta de usuários e posts, utilizando Spring Boot para o backend e MongoDB como banco de dados NoSQL. O sistema inclui autenticação básica dos dados, operações CRUD para usuários, e busca avançada nos posts, incluindo filtros por título e por datas.
+Este projeto é uma API RESTful desenvolvida com **Spring Boot** e **MongoDB**, com o objetivo de demonstrar os fundamentos da criação de aplicações web usando arquitetura em camadas, repositórios com Spring Data, tratamento de exceções, uso de DTOs e integração com banco NoSQL.
 
 ---
 
-## Tecnologias Utilizadas
+## 🧠 Objetivo
+
+Criar um sistema de gerenciamento de usuários e postagens, simulando uma rede social básica, com funcionalidades como:
+
+- CRUD de usuários
+- CRUD de postagens
+- Comentários em postagens
+- Busca por título
+- Busca por data com filtro
+
+---
+
+## 🚀 Tecnologias Utilizadas
 
 - Java 17+
 - Spring Boot
 - Spring Data MongoDB
 - MongoDB
 - Maven
-- REST API
-- JSON para comunicação
+- Postman (para testes)
 
 ---
 
-## Estrutura do Código
+## 🛠️ Pré-requisitos
 
-- `com.juliang.workshopmongo.domain`: Classes modelo para Usuário (`User`) e Post (`Post`), com DTOs para transferência de dados.
-- `com.juliang.workshopmongo.dto`: Objetos de transferência (`AuthorDTO`, `CommentDTO`, `UserDTO`).
-- `com.juliang.workshopmongo.repository`: Repositórios MongoDB para `User` e `Post`.
-- `com.juliang.workshopmongo.services`: Lógica de negócio para usuários e posts (`UserService`, `PostService`).
-- `com.juliang.workshopmongo.resources`: Controladores REST para expor endpoints da API.
-- `com.juliang.workshopmongo.resources.exception`: Tratamento de exceções customizadas para a API.
-- `com.juliang.workshopmongo.config`: Configuração inicial e instanciador de dados para testes.
+Antes de rodar o projeto, certifique-se de ter instalado:
+
+- [Java JDK 17+](https://www.oracle.com/java/technologies/javase-downloads.html)
+- [MongoDB](https://www.mongodb.com/try/download/community)
+- [Maven](https://maven.apache.org/install.html)
 
 ---
 
-## Funcionalidades
+## 💻 Como Rodar o Projeto Localmente
 
-### Usuários
+1. **Clone o repositório:**
 
-- Listar todos os usuários
-- Consultar usuário por ID
-- Criar novo usuário
-- Atualizar usuário existente
-- Deletar usuário
-- Listar posts de um usuário específico
+```bash
+git clone https://github.com/ju-ns/workshop-spring-boot-mongodb.git
+```
+2. Acesse o diretório do projeto:
 
-### Posts
-
-- Consultar post por ID
-- Buscar posts por título (case-insensitive)
-- Busca completa por texto (título, corpo ou comentários) com filtro por intervalo de datas
-
----
-
-## Endpoints Principais
-
-- `GET /users` — Listar usuários
-- `GET /users/{id}` — Buscar usuário por ID
-- `POST /users` — Criar usuário
-- `PUT /users/{id}` — Atualizar
-
-## Como Rodar o Projeto
-
-1. Clone o repositório:
  ```bash
-   git clone https://github.com/ju-ns/workshop-spring-boot-mongodb.git
+ cd workshop-spring-boot-mongodb
+ ```
+3. Suba o MongoDB localmente (caso não esteja rodando):
+
+ ```bash
+mongod
+ ```
+4. Execute a aplicação via Maven ou pela IDE:
+ 
+ ```bash
+./mvnw spring-boot:run
+ ```
+
+## 📬 Principais Endpoints
+
+| Método | Endpoint                                                  | Descrição                                    |
+|--------|-----------------------------------------------------------|----------------------------------------------|
+| GET    | `/users`                                                  | Lista todos os usuários                      |
+| GET    | `/users/{id}`                                             | Busca um usuário por ID                      |
+| POST   | `/users`                                                  | Cria um novo usuário                         |
+| PUT    | `/users/{id}`                                             | Atualiza os dados de um usuário              |
+| DELETE | `/users/{id}`                                             | Deleta um usuário                            |
+| GET    | `/posts/{id}`                                             | Retorna uma postagem com comentários         |
+| GET    | `/posts/titlesearch?text=abc`                             | Busca por título (case insensitive)          |
+| GET    | `/posts/fullsearch?text=abc&minDate=2020-01-01&maxDate=2024-12-31` | Busca por data e texto                      |
+
+## 📂 Estrutura do Projeto
+
+```text
+src
+├── main
+│ ├── java
+│ │ └── com.juliang.workshopmongo
+│ │ ├── config # Instancia dados de teste
+│ │ ├── controller # Controladores REST
+│ │ ├── domain # Entidades (User, Post, Comment)
+│ │ ├── dto # Data Transfer Objects
+│ │ ├── repository # Interfaces de repositório
+│ │ ├── services # Lógica de negócio
+│ │ └── services.exception # Exceções personalizadas
+│ └── resources
+│ └── application.properties
 ```
 
-2. Configure o MongoDB localmente ou via container Docker.
-3. Importe o projeto na sua IDE preferida (IntelliJ, Eclipse, VSCode).
-4. Execute a classe principal `com.juliang.workshopmongo.WorkshopmongoApplication`.
-5. A API estará disponível em `http://localhost:8080`.
+## 🧪 Exemplos de Requisições
+
+### 📌 Criar um usuário (`POST /users`)
+
+**Requisição JSON:**
+
+```json
+{
+  "name": "Maria Silva",
+  "email": "maria@gmail.com"
+}
+```
+### 🔍 Buscar postagens por título (`GET /posts/titlesearch?text=viagem`)
+
+Retorna todas as postagens cujo título contenha **"viagem"**.
 
 ---
 
-## Tratamento de Erros
+### ⚠️ Tratamento de Erros
 
-O projeto implementa tratamento customizado para exceções, como `ObjectNotFoundException`, retornando status HTTP apropriados e mensagens padronizadas.
+Quando um recurso não é encontrado, a API retorna uma resposta como:
 
----
+```json
+{
+  "timestamp": "2025-07-21T15:34:12.569+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Object not found",
+  "path": "/users/123"
+}
+```
 
-## Autor
+## 📄 Licença
+Este projeto está licenciado sob a licença MIT. Veja mais detalhes em LICENSE.
 
-Julia Anísio Nogueira Nunes
+## ✍️ Autoria
+Projeto desenvolvido durante estudos com base em conteúdos da DevSuperior e aprimorado por Julia Nunes.
 
----
-
-## Licença
-
-Este projeto está sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
 
 
